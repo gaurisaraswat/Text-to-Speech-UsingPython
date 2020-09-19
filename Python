@@ -1,0 +1,50 @@
+#description: this program takes texts from an online article and converts it into speech 
+
+!pip -q install newspaper3k
+!pip -q install gTTS
+
+## If you need to play from console, then one can use pydub
+!pip -q install pydub
+
+
+#import the libraries 
+from newspaper import Article 
+import nltk 
+from gtts import gTTS 
+import os 
+
+#get the article 
+article = Article ('https://simple.wikipedia.org/wiki/Car')
+
+article.download() #download the article 
+article.parse()  #parse the article 
+nltk.download('punkt') #download the punkt package 
+article.nlp() #apply nlp (natural language processing) 
+
+#get article text and store it in a variable called "mytext"
+mytext = article.text
+
+#print the text 
+print(mytext)
+
+language = 'en' #English
+## You can choose to change the language as per your preference 
+
+#convert the text to speech 
+myobj = gTTS(text=mytext, lang=language, slow=False) 
+
+#save the converted audio file 
+myobj.save('read_article.mp3')
+
+#play the converted file 
+
+## For Jupyter Notebook
+from IPython.display import Audio
+Audio('read_article.mp3')
+
+## This should work while playing from console
+from pydub import AudioSegment
+from pydub.playback import play
+
+sound = AudioSegment.from_mp3('read_article.mp3')
+play(sound)
